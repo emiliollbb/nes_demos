@@ -106,6 +106,8 @@ _main:
   STX PPUDATA ; Tile 2
   INX
   STX PPUDATA ; Tile 3
+  INX
+  STX PPUDATA ; Tile 4
   
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
@@ -239,7 +241,27 @@ _nmi_handler:
 .byt %11111111 ; Row 6
 .byt %11111111 ; Row 7
 
-; Tile 3. First 4 pixel, each one of one of the palette colors
+; Tile 3
+; LOW bit
+.byt %11111111 ; Row 0
+.byt %11111111 ; Row 1
+.byt %11111111 ; Row 2
+.byt %11111111 ; Row 3
+.byt %11111111 ; Row 4
+.byt %11111111 ; Row 5
+.byt %11111111 ; Row 6
+.byt %11111111 ; Row 7
+; HIGH bit
+.byt %11111111 ; Row 0
+.byt %11111111 ; Row 1
+.byt %11111111 ; Row 2
+.byt %11111111 ; Row 3
+.byt %11111111 ; Row 4
+.byt %11111111 ; Row 5
+.byt %11111111 ; Row 6
+.byt %11111111 ; Row 7
+
+; Tile 4. First 4 pixel, each one of one of the palette colors
 ; LOW bit
 .byt %01010000 ; Row 0
 .byt %00000000 ; Row 1
