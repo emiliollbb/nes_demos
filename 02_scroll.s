@@ -128,6 +128,31 @@ _main:
   LDX #3
   STX PPUDATA
   
+  
+  ; Store 960 tiles again, this time for the second tilemap, alternating tiles 1 and 2
+  LDX PPUSTATUS
+  LDX #>PPU_SCREEN_2_MAP
+  STX PPUADDR
+  LDX #<PPU_SCREEN_2_MAP
+  STX PPUADDR
+  LDY #15
+  loop2:
+  LDX #1
+  JSR _draw_row
+  INX
+  JSR _draw_row
+  DEY
+  BNE loop2
+  
+  ; Store tile 3 as first tile in map
+  LDX PPUSTATUS
+  LDX #>PPU_SCREEN_2_MAP
+  STX PPUADDR
+  LDX #<PPU_SCREEN_2_MAP
+  STX PPUADDR
+  LDX #3
+  STX PPUDATA
+  
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
   LDX #>PPU_SCREEN_1_ATTR
