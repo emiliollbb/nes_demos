@@ -165,8 +165,10 @@ forever:
 
 _draw_row:
 .(
-  PHY
   PHA
+  TYA
+  PHA
+  
   LDY #32
   loop:
   
@@ -178,8 +180,10 @@ _draw_row:
   
   DEY
   BNE loop
+  
   PLA
-  PLY
+  TAY
+  PLA
   RTS
 .)
 
