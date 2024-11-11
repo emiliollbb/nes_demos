@@ -108,14 +108,16 @@ _main:
   STX PPUADDR
   LDX #<PPU_SCREEN_1_MAP
   STX PPUADDR
-  ; Store tile numbers in tile map
-  LDX #0
+  ; Store 960 tiles, alternating tiles 1 and 2
+  LDX #1
   STX PPUDATA ; Tile 0
   INX
   STX PPUDATA ; Tile 1
-  INX
+  DEX
   STX PPUDATA ; Tile 2
   INX
+  STX PPUDATA ; Tile 2
+  DEX
   STX PPUDATA ; Tile 3
   INX
   STX PPUDATA ; Tile 4
@@ -128,6 +130,13 @@ _main:
   STX PPUADDR
   ; Store palettes indexes
   LDX #0
+  STX PPUDATA
+  STX PPUDATA
+  STX PPUDATA
+  STX PPUDATA
+  STX PPUDATA
+  STX PPUDATA
+  STX PPUDATA
   STX PPUDATA
   STX PPUDATA
   
@@ -156,7 +165,7 @@ _main:
 ;  5  Emphasize red
 ;  6  Emphasize green
 ;  7  Emphasize blue
-  LDA #%00001000
+  LDA #%00001110
   STA PPUMASK
 forever:
   JMP forever
