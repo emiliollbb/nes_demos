@@ -11,6 +11,7 @@ PPUMASK   = $2001
 PPUSTATUS = $2002
 PPUADDR   = $2006
 PPUDATA   = $2007
+PPUSCROLL = $2005
 
 ; NES Colors
 BLUE     = $01
@@ -208,6 +209,17 @@ _main:
 ;  7  Emphasize blue
   LDA #%00001110
   STA PPUMASK
+  
+  ; wait for vblank
+  vblankwait2:       
+  BIT PPUSTATUS
+  BPL vblankwait2
+  
+  LDA #0
+  STA PPUSCROLL ; set X scroll
+  LDA #248
+  STA PPUSCROLL ; set Y scroll
+  
 forever:
   JMP forever
 .)
