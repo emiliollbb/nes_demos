@@ -109,18 +109,19 @@ _main:
   LDX #<PPU_SCREEN_1_MAP
   STX PPUADDR
   ; Store 960 tiles, alternating tiles 1 and 2
+  LDY #8
   LDX #1
-  STX PPUDATA ; Tile 0
-  INX
+  loop:
   STX PPUDATA ; Tile 1
-  DEX
-  STX PPUDATA ; Tile 2
   INX
   STX PPUDATA ; Tile 2
   DEX
-  STX PPUDATA ; Tile 3
+  STX PPUDATA ; Tile 1
   INX
-  STX PPUDATA ; Tile 4
+  STX PPUDATA ; 2
+  DEX
+  DEY
+  BNE loop
   
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
