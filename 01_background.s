@@ -62,7 +62,28 @@ _main:
   ; Set PPU low address $3F00 to store next value
   LDX #$00
   STX PPUADDR
-  ; Store green value at PPU
+  ; Store palette colors at PPU
+  LDA #BLUE
+  STA PPUDATA
+  LDA #PURPLE
+  STA PPUDATA
+  LDA #ORANGE
+  STA PPUDATA
+  
+  LDA #BLUE
+  STA PPUDATA
+  LDA #PURPLE
+  STA PPUDATA
+  LDA #ORANGE
+  STA PPUDATA
+  
+  LDA #BLUE
+  STA PPUDATA
+  LDA #PURPLE
+  STA PPUDATA
+  LDA #ORANGE
+  STA PPUDATA
+  
   LDA #BLUE
   STA PPUDATA
   LDA #PURPLE
@@ -97,7 +118,23 @@ _main:
   STX PPUDATA
   STX PPUDATA
   
-; Configurar PPU
+  ; wait for vblank
+  vblankwait:       
+  BIT PPUSTATUS
+  BPL vblankwait
+  
+; Configurar PPUCTRL
+;  0 1 Base nametable address (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00)
+;  2   VRAM address increment per CPU read/write of PPUDATA (0= add 1, going across; 1= add 32, going down)
+;  3   Sprite pattern table address for 8x8 sprites (0= $0000; 1= $1000; ignored in 8x16 mode)
+;  4   Background pattern table address (0= $0000; 1= $1000)
+;  5   Sprite size (0= 8x8 pixels; 1= 8x16 pixels – see PPU OAM#Byte 1)
+;  6   PPU master/slave select (0= read backdrop from EXT pins; 1= output color on EXT pins)
+;  7   Vblank NMI enable (0= off, 1= on)
+  LDA #%10001000
+  STA PPUCTRL
+  
+; Configurar PPUMASK
 ;  0  Greyscale mode enable (0 normal color, 1 greyscale)
 ;  1  Left edge (8px) background enable (0 hide, 1 show)
 ;  2  Left edge (8px) foreground enable (0 hide, 1 show)
@@ -106,7 +143,7 @@ _main:
 ;  5  Emphasize red
 ;  6  Emphasize green
 ;  7  Emphasize blue
-  LDA #%00010000
+  LDA #%00001000
   STA PPUMASK
 forever:
   JMP forever
@@ -156,7 +193,7 @@ _nmi_handler:
 .word _irq_handler ; IRQ
 
 
-;=== 8K CHR (TILES) (512 tiles of 16 bytes) ===
+;=== 4K BACKGROUND CHR (TILES) (256 tiles of 16 bytes) ===
 *=$0000
 
 ; Tile 0, all with color zero
@@ -223,6 +260,10 @@ _nmi_handler:
 .byt %00000000 ; Row 7
 
 ; Unused tiles
-.dsb $2000-*, $00
+.dsb $1000-*, $00
 
-
+;=== 4K SPRITE CHR (TILES) (256 tiles of 16 bytes) ===
+*=$0000
+.asc "SPRITES CHR"
+; Unused tiles
+.dsb $1000-*, $00
