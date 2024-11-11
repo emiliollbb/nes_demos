@@ -13,12 +13,13 @@ PPUADDR   = $2006
 PPUDATA   = $2007
 
 ; NES Colors
-BLUE    = $01
-PURPLE  = $14
-ORANGE  = $27
-PINK    = $25 
-GREEN   = $2a
+BLUE     = $01
+PURPLE   = $14
+ORANGE   = $27
+PINK     = $25 
+GREEN    = $2a
 SKY_BLUE = $2c
+RED      = $16
 
 ;Palettes -> PPU memory from $3f00 to $3f20
 PPU_BG_PALETTE_0 = $3F00 ; 4 colors in each palette. First one is universal background in all of them.
@@ -72,7 +73,7 @@ _main:
   STA PPUDATA
   LDA #SKY_BLUE
   STA PPUDATA
-  LDA #PINK
+  LDA #RED
   STA PPUDATA
   
   LDA #GREEN
@@ -81,7 +82,7 @@ _main:
   STA PPUDATA
   LDA #SKY_BLUE
   STA PPUDATA
-  LDA #PINK
+  LDA #RED
   STA PPUDATA
   
   LDA #GREEN
@@ -90,7 +91,7 @@ _main:
   STA PPUDATA
   LDA #SKY_BLUE
   STA PPUDATA
-  LDA #PINK
+  LDA #RED
   STA PPUDATA
   
   LDA #GREEN
@@ -99,7 +100,7 @@ _main:
   STA PPUDATA
   LDA #SKY_BLUE
   STA PPUDATA
-  LDA #PINK
+  LDA #RED
   STA PPUDATA
   
   ; Set PPU address to nametable 1
@@ -117,6 +118,15 @@ _main:
   JSR _draw_row
   DEY
   BNE loop
+  
+  ; Store tile 3 as first tile in map
+  LDX PPUSTATUS
+  LDX #>PPU_SCREEN_1_MAP
+  STX PPUADDR
+  LDX #<PPU_SCREEN_1_MAP
+  STX PPUADDR
+  LDX #3
+  STX PPUDATA
   
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
@@ -272,6 +282,26 @@ _nmi_handler:
 .byt %00000000 ; Row 5
 .byt %00000000 ; Row 6
 .byt %00000000 ; Row 7
+; HIGH bit
+.byt %11111111 ; Row 0
+.byt %11111111 ; Row 1
+.byt %11111111 ; Row 2
+.byt %11111111 ; Row 3
+.byt %11111111 ; Row 4
+.byt %11111111 ; Row 5
+.byt %11111111 ; Row 6
+.byt %11111111 ; Row 7
+
+; Tile 3
+; LOW bit
+.byt %11111111 ; Row 0
+.byt %11111111 ; Row 1
+.byt %11111111 ; Row 2
+.byt %11111111 ; Row 3
+.byt %11111111 ; Row 4
+.byt %11111111 ; Row 5
+.byt %11111111 ; Row 6
+.byt %11111111 ; Row 7
 ; HIGH bit
 .byt %11111111 ; Row 0
 .byt %11111111 ; Row 1
