@@ -109,19 +109,8 @@ _main:
   LDX #<PPU_SCREEN_1_MAP
   STX PPUADDR
   ; Store 960 tiles, alternating tiles 1 and 2
-  LDY #8
   LDX #1
-  loop:
-  STX PPUDATA ; Tile 1
-  INX
-  STX PPUDATA ; Tile 2
-  DEX
-  STX PPUDATA ; Tile 1
-  INX
-  STX PPUDATA ; 2
-  DEX
-  DEY
-  BNE loop
+  JSR _draw_row
   
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
@@ -172,6 +161,26 @@ forever:
   JMP forever
 .)
 ; -- end main method --
+
+
+_draw_row:
+.(
+  PHY
+  LDY #8
+  loop:
+  STX PPUDATA ; Tile 1
+  INX
+  STX PPUDATA ; Tile 2
+  DEX
+  STX PPUDATA ; Tile 1
+  INX
+  STX PPUDATA ; 2
+  DEX
+  DEY
+  BNE loop
+  PLY
+  RTS
+.)
 
 _reset_handler:
 .(
