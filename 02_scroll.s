@@ -15,6 +15,7 @@ PPUDATA   = $2007
 ; NES Colors
 BLUE     = $01
 PURPLE   = $14
+LIGHT_PURPLE = $24
 ORANGE   = $27
 PINK     = $25 
 GREEN    = $2a
@@ -31,7 +32,7 @@ PPU_BG_PALETTE_3 = $3F0C
 
 
 PPU_SCREEN_1_MAP=$2000 ; 960 tiles of 1 byte + 64 bytes attribute table
-PPU_SCREEN_1_ATTR=$23C0
+PPU_SCREEN_1_ATTR=$23C0 ; 64 bytes attribute table
 PPU_SCREEN_2_MAP=$2400
 PPU_SCREEN_2_ATTR=$27C0
 PPU_SCREEN_3_MAP=$2800
@@ -78,9 +79,9 @@ _main:
   
   LDA #GREEN
   STA PPUDATA
-  LDA #BLUE
+  LDA #PURPLE
   STA PPUDATA
-  LDA #SKY_BLUE
+  LDA #LIGHT_PURPLE
   STA PPUDATA
   LDA #RED
   STA PPUDATA
@@ -160,16 +161,25 @@ _main:
   LDX #<PPU_SCREEN_1_ATTR
   STX PPUADDR
   ; Store palettes indexes
-  LDX #0
+  LDY 1
+  LDX #$0
+  loop3:
   STX PPUDATA
+  DEY
+  ;BNE loop3
+  
+  ; Second palette for the whole second map
+  LDX PPUSTATUS
+  LDX #>PPU_SCREEN_2_ATTR
+  STX PPUADDR
+  LDX #<PPU_SCREEN_2_ATTR
+  STX PPUADDR
+  LDY 1
+  LDX #%01010101
+  loop4:
   STX PPUDATA
-  STX PPUDATA
-  STX PPUDATA
-  STX PPUDATA
-  STX PPUDATA
-  STX PPUDATA
-  STX PPUDATA
-  STX PPUDATA
+  DEY
+  ;BNE loop4
   
   ; wait for vblank
   vblankwait:       
