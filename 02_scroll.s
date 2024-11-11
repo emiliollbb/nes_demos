@@ -161,12 +161,12 @@ _main:
   LDX #<PPU_SCREEN_1_ATTR
   STX PPUADDR
   ; Store palettes indexes
-  LDY 1
+  LDY #64
   LDX #$0
   loop3:
   STX PPUDATA
   DEY
-  ;BNE loop3
+  BNE loop3
   
   ; Second palette for the whole second map
   LDX PPUSTATUS
@@ -174,12 +174,12 @@ _main:
   STX PPUADDR
   LDX #<PPU_SCREEN_2_ATTR
   STX PPUADDR
-  LDY 1
+  LDY #64
   LDX #%01010101
   loop4:
   STX PPUDATA
   DEY
-  ;BNE loop4
+  BNE loop4
   
   ; wait for vblank
   vblankwait:       
