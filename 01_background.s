@@ -16,6 +16,7 @@ PPUDATA   = $2007
 BLUE    = $01
 PURPLE  = $14
 ORANGE  = $27
+PINK    = $25 
 
 ;Palettes -> PPU memory from $3f00 to $3f20
 PPU_BG_PALETTE_0 = $3F00 ; 4 colors in each palette. First one is universal background in all of them.
@@ -69,12 +70,7 @@ _main:
   STA PPUDATA
   LDA #ORANGE
   STA PPUDATA
-  
-  LDA #BLUE
-  STA PPUDATA
-  LDA #PURPLE
-  STA PPUDATA
-  LDA #ORANGE
+  LDA #PINK
   STA PPUDATA
   
   LDA #BLUE
@@ -83,12 +79,25 @@ _main:
   STA PPUDATA
   LDA #ORANGE
   STA PPUDATA
+  LDA #PINK
+  STA PPUDATA
   
   LDA #BLUE
   STA PPUDATA
   LDA #PURPLE
   STA PPUDATA
   LDA #ORANGE
+  STA PPUDATA
+  LDA #PINK
+  STA PPUDATA
+  
+  LDA #BLUE
+  STA PPUDATA
+  LDA #PURPLE
+  STA PPUDATA
+  LDA #ORANGE
+  STA PPUDATA
+  LDA #PINK
   STA PPUDATA
   
   ; Set PPU address to nametable 1
