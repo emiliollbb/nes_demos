@@ -166,18 +166,19 @@ forever:
 _draw_row:
 .(
   PHY
-  LDY #8
+  PHA
+  LDY #32
   loop:
+  
   STX PPUDATA ; Tile 1
+  TXA
+  AND #%00000001
+  TAX
   INX
-  STX PPUDATA ; Tile 2
-  DEX
-  STX PPUDATA ; Tile 1
-  INX
-  STX PPUDATA ; 2
-  DEX
+  
   DEY
   BNE loop
+  PLA
   PLY
   RTS
 .)
