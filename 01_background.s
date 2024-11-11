@@ -57,7 +57,7 @@ _main:
   ; Reset latch PPUADDR
   LDX PPUSTATUS
   ; Set PPU high address $3F00 to store next value
-  LDX #$>>PPU_BG_PALETTE_0
+  LDX #>PPU_BG_PALETTE_0
   STX PPUADDR
   ; Set PPU low address $3F00 to store next value
   LDX #$00
@@ -72,9 +72,9 @@ _main:
   
   ; Set PPU address to nametable 1
   LDX PPUSTATUS
-  LDX #$>>PPU_SCREEN_1_MAP
+  LDX #>PPU_SCREEN_1_MAP
   STX PPUADDR
-  LDX #$<<PPU_SCREEN_1_MAP
+  LDX #<PPU_SCREEN_1_MAP
   STX PPUADDR
   ; Store tile numbers in tile map
   LDX #0
@@ -88,9 +88,9 @@ _main:
   
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
-  LDX #$>>PPU_SCREEN_1_ATTR
+  LDX #>PPU_SCREEN_1_ATTR
   STX PPUADDR
-  LDX #$<<PPU_SCREEN_1_ATTR
+  LDX #<PPU_SCREEN_1_ATTR
   STX PPUADDR
   ; Store palettes indexes
   LDX #0
