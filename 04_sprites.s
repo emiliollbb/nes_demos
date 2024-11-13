@@ -12,6 +12,8 @@ PPUSTATUS = $2002
 PPUADDR   = $2006
 PPUDATA   = $2007
 PPUSCROLL = $2005
+OAMADDR   = $2003
+OAMDMA    = $4014
 
 ; NES Colors
 BLUE     = $01
@@ -22,6 +24,8 @@ PINK     = $25
 GREEN    = $2a
 SKY_BLUE = $2c
 RED      = $16
+BLACK    = $0F
+SKY_BLUE_LIGHT  = $3c
 
 ;Palettes -> PPU memory from $3f00 to $3f20
 PPU_BG_PALETTE_0 = $3F00 ; 4 colors in each palette. First one is universal background in all of them.
@@ -90,9 +94,9 @@ _main:
   ; Store palette colors at PPU
   LDA #GREEN
   STA PPUDATA
-  LDA #BLUE
-  STA PPUDATA
   LDA #SKY_BLUE
+  STA PPUDATA
+  LDA #SKY_BLUE_LIGHT
   STA PPUDATA
   LDA #RED
   STA PPUDATA
@@ -123,6 +127,45 @@ _main:
   STA PPUDATA
   LDA #RED
   STA PPUDATA
+  
+  
+  
+  LDA #GREEN
+  STA PPUDATA
+  LDA #BLACK
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  
+  LDA #GREEN
+  STA PPUDATA
+  LDA #BLACK
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  
+  LDA #GREEN
+  STA PPUDATA
+  LDA #BLACK
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  
+  LDA #GREEN
+  STA PPUDATA
+  LDA #BLACK
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  LDA #RED
+  STA PPUDATA
+  
   
   ; Set PPU address to nametable 1
   LDX PPUSTATUS
@@ -207,6 +250,16 @@ _main:
   LDA #248
   STA scrolly
   
+  ; write sprite data
+  LDA #$70
+  STA $0200 ; Y-coord of first sprite
+  LDA #5
+  STA $0201 ; tile number of first sprite
+  LDA #$00
+  STA $0202 ; attributes of first sprite
+  LDA #$80
+  STA $0203 ; X-coord of first sprite
+  
   ; wait for vblank
   vblankwait:       
   BIT PPUSTATUS
@@ -220,7 +273,7 @@ _main:
 ;  5   Sprite size (0= 8x8 pixels; 1= 8x16 pixels – see PPU OAM#Byte 1)
 ;  6   PPU master/slave select (0= read backdrop from EXT pins; 1= output color on EXT pins)
 ;  7   Vblank NMI enable (0= off, 1= on)
-  LDA #%10001000
+  LDA #%10000000
   STA PPUCTRL
   
 ; Configurar PPUMASK
@@ -232,7 +285,7 @@ _main:
 ;  5  Emphasize red
 ;  6  Emphasize green
 ;  7  Emphasize blue
-  LDA #%00001110
+  LDA #%00011110
   STA PPUMASK
   
 forever:
@@ -258,13 +311,17 @@ _update:
   LDA gamepad1
   AND #BTN_LEFT
   BEQ next3
-  NOP
+  LDX $0203
+  DEX
+  STX $0203
   next3:
   
   LDA gamepad1
   AND #BTN_RIGHT
   BEQ next4
-  NOP
+  LDX $0203
+  INX
+  STX $0203
   next4:
   
   RTS
@@ -331,6 +388,12 @@ _irq_handler:
 _nmi_handler:
 .(
   PHA
+
+  ; Copy OAM cache
+  LDA #$00
+  STA OAMADDR
+  LDA #$02
+  STA OAMDMA
 
   ; Set Background scroll
   LDA scrollx
@@ -439,6 +502,45 @@ _nmi_handler:
 .byt %11111111 ; Row 6
 .byt %11111111 ; Row 7
 
+; Tile 4
+; LOW bit
+.byt %00011000 ; Row 0
+.byt %00111100 ; Row 1
+.byt %01111110 ; Row 2
+.byt %11111111 ; Row 3
+.byt %00011000 ; Row 4
+.byt %00011000 ; Row 5
+.byt %00011000 ; Row 6
+.byt %11111111 ; Row 7
+; HIGH bit
+.byt %00000000 ; Row 0
+.byt %00000000 ; Row 1
+.byt %00000000 ; Row 2
+.byt %00000000 ; Row 3
+.byt %00000000 ; Row 4
+.byt %00000000 ; Row 5
+.byt %00000000 ; Row 6
+.byt %00000000 ; Row 7
+
+; Tile 5
+; LOW bit
+.byt %00110000 ; Row 0
+.byt %00011000 ; Row 1
+.byt %00001100 ; Row 2
+.byt %11111111 ; Row 3
+.byt %11111111 ; Row 4
+.byt %00001100 ; Row 5
+.byt %00011000 ; Row 6
+.byt %00110000 ; Row 7
+; HIGH bit
+.byt %00000000 ; Row 0
+.byt %00000000 ; Row 1
+.byt %00000000 ; Row 2
+.byt %00000000 ; Row 3
+.byt %00000000 ; Row 4
+.byt %00000000 ; Row 5
+.byt %00000000 ; Row 6
+.byt %00000000 ; Row 7
 
 ; Unused tiles
 .dsb $1000-*, $00
