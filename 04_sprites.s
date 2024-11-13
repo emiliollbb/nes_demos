@@ -62,6 +62,7 @@ gamepad1 = $01
 gamepad2 = $02
 scrollx  = $03
 scrolly  = $04
+oambuffer = $0200
 
 
 ; === EMULATORS HEADER (16 byte) (https://www.nesdev.org/wiki/INES) ===
@@ -251,14 +252,19 @@ _main:
   STA scrolly
   
   ; write sprite data
+  
+  ; Y-coord of first sprite
   LDA #$70
-  STA $0200 ; Y-coord of first sprite
+  STA $0200 
+  ; tile number of first sprite
   LDA #5
-  STA $0201 ; tile number of first sprite
+  STA $0201
+  ; attributes of first sprite 
   LDA #$00
-  STA $0202 ; attributes of first sprite
+  STA $0202
+  ; X-coord of first sprite
   LDA #$80
-  STA $0203 ; X-coord of first sprite
+  STA $0203 
   
   ; wait for vblank
   vblankwait:       
@@ -311,9 +317,14 @@ _update:
   LDA gamepad1
   AND #BTN_LEFT
   BEQ next3
+  ; Update x coord
   LDX $0203
   DEX
   STX $0203
+  ; Enable horizontal flip
+  LDA $0202
+  ORA #%01000000
+  STA $0202
   next3:
   
   LDA gamepad1
@@ -322,6 +333,10 @@ _update:
   LDX $0203
   INX
   STX $0203
+  ; Disable flip
+  LDA $0202
+  AND #%10111111
+  STA $0202
   next4:
   
   RTS
@@ -390,9 +405,9 @@ _nmi_handler:
   PHA
 
   ; Copy OAM cache
-  LDA #$00
+  LDA #<oambuffer
   STA OAMADDR
-  LDA #$02
+  LDA #>oambuffer
   STA OAMDMA
 
   ; Set Background scroll
