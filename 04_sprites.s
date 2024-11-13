@@ -305,13 +305,33 @@ _update:
   LDA gamepad1
   AND #BTN_UP
   BEQ next
-  NOP
+  ; Update y coord
+  LDX $0200
+  DEX
+  STX $0200
+  ; Set tile
+  LDA #4
+  STA $0201
+  ; Disable flip
+  LDA $0202
+  AND #%01111111
+  STA $0202
   next:
   
   LDA gamepad1
   AND #BTN_DOWN
   BEQ next2
-  NOP
+  ; Update y coord
+  LDX $0200
+  INX
+  STX $0200
+  ; Set tile
+  LDA #4
+  STA $0201
+  ; Enable vertical flip
+  LDA $0202
+  ORA #%10000000
+  STA $0202
   next2:
   
   LDA gamepad1
@@ -321,6 +341,9 @@ _update:
   LDX $0203
   DEX
   STX $0203
+  ; Set tile
+  LDA #5
+  STA $0201
   ; Enable horizontal flip
   LDA $0202
   ORA #%01000000
@@ -333,6 +356,9 @@ _update:
   LDX $0203
   INX
   STX $0203
+  ; Set tile
+  LDA #5
+  STA $0201
   ; Disable flip
   LDA $0202
   AND #%10111111
