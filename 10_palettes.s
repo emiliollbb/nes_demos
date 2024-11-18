@@ -109,7 +109,6 @@ main:
   
 ; Activar PPU
   LDA #$1e
-  LDA #%00011110
   STA PPUMASK
 forever:
   JMP forever
