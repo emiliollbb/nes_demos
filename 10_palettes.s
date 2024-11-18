@@ -27,7 +27,7 @@ PPUPALETTES = $3F00
 
 ; Cabecera emuladores
 *=$0000
-.byte $4e, $45, $53, $1a, $02, $01, $00, $00
+.byt $4e,$45,$53,$1a,$02,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00
 
 
 ; Direccion de memoria de inicio de la ROM
@@ -86,9 +86,9 @@ main:
   STA PPUDATA
   LDA #ROJO
   STA PPUDATA
-  LDA #VERDE
+  LDA #AZUL
   STA PPUDATA
-  LDA #AMARILLO
+  LDA #ROSA
   STA PPUDATA
   
   ; Ahora vamos a enviar las cuatro paletas de sprites, en este 
@@ -99,9 +99,9 @@ main:
 	  STA PPUDATA
 	  LDA #ROJO
 	  STA PPUDATA
-	  LDA #VERDE
+	  LDA #NARANJA
 	  STA PPUDATA
-	  LDA #AMARILLO
+	  LDA #VERDE
 	  STA PPUDATA
 	  DEY
   BNE bucle
