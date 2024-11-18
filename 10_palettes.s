@@ -1,8 +1,14 @@
 ; Ejemplo de paletas NES
-; ----------------------
-; Compilar con xa -C ejemplo.s -o ejemplo.nes
+; ---------------------------------------------------------------------|
+; Compilar con xa -C ejemplo.s -o ejemplo.nes                          |
+; Ejecutar el .nes en un emulador, por ejemplo fceux, y comprobar que  |
+; aparece el fondo celeste y si abrimos el visor de la PPU, disponible | 
+; en el menu debug / ppu viewer vemos las ocho paletas de colores      |
+; cargadas con los colores usados en el codigo                         |
+;----------------------------------------------------------------------|
 
-; Tabla colores NES
+; Tabla colores NES (extracto)
+; La tabla completa se puede consultar en
 ; https://famicom.party/_app/immutable/assets/NES_color_palette_with_numbers.pvUMp0SZ.webp
 AZUL           = $01
 VIOLETA        = $14
@@ -58,7 +64,9 @@ main:
   STA PPUDATA
   
   ; Enviamos la segunda paleta de fondo. El primer color debe ser el mismo 
-  ; en las 8 paletas. Sera usado como color de trnasparencia en los sprites
+  ; en las 8 paletas. Sera usado como color de trnasparencia en los sprites.
+  ; Podemos enviar a la PPU tantos datos seguidos como queramos, se iran 
+  ; guardando en posiciones contiguas de memoria
   LDA #CELESTE_CLARO
   STA PPUDATA
   LDA #NARANJA
@@ -93,8 +101,8 @@ main:
   
   ; Ahora vamos a enviar las cuatro paletas de sprites, en este 
   ; caso vamos a usar un bucle, y vamos a enviar las cuatro iguales
-  LDY #4
-  bucle:
+  LDY #4 ; y=4
+  bucle: ; do {
 	  LDA #CELESTE_CLARO
 	  STA PPUDATA
 	  LDA #ROJO
@@ -103,16 +111,18 @@ main:
 	  STA PPUDATA
 	  LDA #VERDE
 	  STA PPUDATA
-	  DEY
-  BNE bucle
+	  DEY ; y = y-1
+  BNE bucle ; } while(y!=0)
   
   
-; Activar PPU
+  ; Activar PPU
   LDA #$1e
   STA PPUMASK
-forever:
+  
+  ; No hacer nada mas. En el 6502 no hay wait ni nada parecido, 
+  ; Solo podemos hacer un bucle infinito para detener la ejecucion
+  forever:
   JMP forever
-.asc "MAIN"
 .)
 
 ; Rutina de arranque de la NES. Esta rutina la mantendremos siempre igual
@@ -132,12 +142,12 @@ init:
   STX PPUMASK
   STX $4010
   ; Esperar a que la PPU este lista
-  BIT $2002
-vblankwait:
-  BIT $2002
+  BIT PPUSTATUS
+  vblankwait:
+  BIT PPUSTATUS
   BPL vblankwait
-vblankwait2:
-  BIT $2002
+  vblankwait2:
+  BIT PPUSTATUS
   BPL vblankwait2
   ; Ir al codigo principal
   JMP main
