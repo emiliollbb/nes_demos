@@ -32,6 +32,10 @@ PPU_BG_PALETTE_0 = $3F00 ; 4 colors in each palette. First one is universal back
 PPU_BG_PALETTE_1 = $3F04
 PPU_BG_PALETTE_2 = $3F08
 PPU_BG_PALETTE_3 = $3F0C
+PPU_FG_PALETTE_0 = $3f10
+PPU_FG_PALETTE_1 = $3f14
+PPU_FG_PALETTE_2 = $3f18
+PPU_FG_PALETTE_3 = $3f1c
 
 ; PPU Tilemaps
 PPU_SCREEN_1_MAP=$2000 ; 960 tiles of 1 byte + 64 bytes attribute table
