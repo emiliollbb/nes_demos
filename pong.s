@@ -98,15 +98,15 @@ _main:
   STX PPUADDR
   
   ; Send paleta
-  paleta: .byt $21,$03,$14,$28, $21,$21,$21,$21, $21,$21,$21,$21 ,$21,$21,$21,$21,
-  .byt $21,BLACK,RED,RED ,$21,BLACK,RED,RED ,$21,BLACK,RED,RED ,$21,BLACK,RED,RED
+  paleta: 
+  .byt $21,$03,$14,$28, $21,$21,$21,$21, $21,$21,$21,$21 ,$21,$21,$21,$21,
+  .byt $21,$16,$28,$0f, $21,$21,$21,$21, $21,$21,$21,$21 ,$21,$21,$21,$21,
   LDX #0
-  LDY #32
   loop_paletas
     LDA paleta,X
     STA PPUDATA
     INX
-    DEY
+    CPX #32
   BNE loop_paletas
   
   
@@ -117,7 +117,7 @@ _main:
   STX PPUADDR
   LDX #<PPU_SCREEN_1_MAP
   STX PPUADDR
-  ; Store 960 tiles, alternating tiles 1 and 2
+  ; Store first of 960 tiles
   LDA #1
   STA PPUDATA
     
@@ -140,17 +140,17 @@ _main:
   ; write sprite data
   
   ; Y-coord of first sprite
-  LDA #$70
+  LDA #50
   STA $0200 
   ; tile number of first sprite
-  LDA #5
+  LDA #1
   STA $0201
   ; attributes of first sprite 
   LDA #$00
   STA $0202
   ; X-coord of first sprite
-  LDA #$80
-  STA $0203 
+  LDA #50
+  STA $0203
   
   ; wait for vblank
   vblankwait:       
@@ -165,7 +165,7 @@ _main:
 ;  5   Sprite size (0= 8x8 pixels; 1= 8x16 pixels – see PPU OAM#Byte 1)
 ;  6   PPU master/slave select (0= read backdrop from EXT pins; 1= output color on EXT pins)
 ;  7   Vblank NMI enable (0= off, 1= on)
-  LDA #%10000000
+  LDA #%10001000
   STA PPUCTRL
   
 ; Configurar PPUMASK
@@ -195,13 +195,6 @@ _update:
   LDX $0200
   DEX
   STX $0200
-  ; Set tile
-  LDA #4
-  STA $0201
-  ; Disable flip
-  LDA $0202
-  AND #%01111111
-  STA $0202
   next:
   
   LDA gamepad1
@@ -211,148 +204,12 @@ _update:
   LDX $0200
   INX
   STX $0200
-  ; Set tile
-  LDA #4
-  STA $0201
-  ; Enable vertical flip
-  LDA $0202
-  ORA #%10000000
-  STA $0202
   next2:
   
-  LDA gamepad1
-  AND #BTN_LEFT
-  BEQ next3
-  ; Update x coord
-  LDX $0203
-  DEX
-  STX $0203
-  ; Set tile
-  LDA #5
-  STA $0201
-  ; Enable horizontal flip
-  LDA $0202
-  ORA #%01000000
-  STA $0202
-  next3:
-  
-  LDA gamepad1
-  AND #BTN_RIGHT
-  BEQ next4
-  LDX $0203
-  INX
-  STX $0203
-  ; Set tile
-  LDA #5
-  STA $0201
-  ; Disable flip
-  LDA $0202
-  AND #%10111111
-  STA $0202
-  next4:
-  
-  RTS
-.)
-
-_draw_row:
-.(
-  PHA
-  TYA
-  PHA
-  
-  LDY #32
-  loop:
-  
-  STX PPUDATA ; Tile 1
-  TXA
-  AND #%00000001
-  TAX
-  INX
-  
-  DEY
-  BNE loop
-  
-  PLA
-  TAY
-  PLA
   RTS
 .)
 
 
-
-LDA #$21
-  STA PPUDATA
-  LDA #$03
-  STA PPUDATA
-  LDA #$14
-  STA PPUDATA
-  LDA #$28
-  STA PPUDATA
-  
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  LDA #$21
-  STA PPUDATA
-  
-  ; SPRITE PALETTES
-  
-  LDA #$21
-  STA PPUDATA
-  LDA #BLACK
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
-  
-  LDA #$21
-  STA PPUDATA
-  LDA #BLACK
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
-  
-  LDA #$21
-  STA PPUDATA
-  LDA #BLACK
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
-  
-  LDA #$21
-  STA PPUDATA
-  LDA #BLACK
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
-  LDA #RED
-  STA PPUDATA
 
 _reset_handler:
 .(
@@ -453,6 +310,11 @@ _nmi_handler:
 
 ;=== 4K SPRITE CHR (TILES) (256 tiles of 16 bytes) ===
 *=$0000
-.asc "SPRITES CHR"
+
+; Tile 0, all with color zero
+.byt $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,
+; Tile 1
+.byt $18,$7E,$FF,$93,$A5,$C9,$93,$A5,$18,$66,$81,$FF,$FF,$FF,$FF,$FF
+
 ; Unused tiles
 .dsb $1000-*, $00
