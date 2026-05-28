@@ -138,19 +138,14 @@ _main:
   STA scrolly
   
   ; write sprite data
+  LDX #0
+  loop3:
+  LDA sprites,X
+  STA $0200,X
+  INX
+  CPX #32
+  BNE loop3
   
-  ; Y-coord of first sprite
-  LDA #50
-  STA $0200 
-  ; tile number of first sprite
-  LDA #1
-  STA $0201
-  ; attributes of first sprite 
-  LDA #$00
-  STA $0202
-  ; X-coord of first sprite
-  LDA #50
-  STA $0203
   
   ; wait for vblank
   vblankwait:       
@@ -193,6 +188,9 @@ _update:
   BEQ next
   ; Update y coord
   DEC $0200
+  DEC $0204
+  DEC $0208
+  DEC $020C
   next:
   
   LDA gamepad1
@@ -200,12 +198,20 @@ _update:
   BEQ next2
   ; Update y coord
   INC $0200
+  INC $0204
+  INC $0208
+  INC $020C
   next2:
   
   RTS
 .)
 
-
+sprites:
+;      y tile attr   x
+.byt 50,1,  $00,50
+.byt 58,2,0,50
+.byt 66,3,0,50
+.byt 74,4,0,50
 
 _reset_handler:
 .(
@@ -313,6 +319,7 @@ _nmi_handler:
 .byt $18,$7E,$FF,$93,$A5,$C9,$93,$A5,$18,$66,$81,$FF,$FF,$FF,$FF,$FF
 .byt $C9,$93,$A5,$C9,$93,$A5,$C9,$93,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
 .byt $A5,$C9,$93,$A5,$C9,$93,$A5,$C9,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+.byt $93,$A5,$C9,$93,$A5,$FF,$7E,$18,$FF,$FF,$FF,$FF,$FF,$81,$66,$18
 
 ; Unused tiles
 .dsb $1000-*, $00
