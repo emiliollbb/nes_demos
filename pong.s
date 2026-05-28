@@ -120,6 +120,12 @@ _main:
   ; Store first of 960 tiles
   LDA #1
   STA PPUDATA
+  LDA #2
+  STA PPUDATA
+  LDA #3
+  STA PPUDATA
+  LDA #4
+  STA PPUDATA
     
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
@@ -301,10 +307,12 @@ _nmi_handler:
 *=$0000
 
 ; Tile 0, all with color zero
-.byt $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,
+.byt $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 ; Tile 1
-.byt $00,$00,$03,$03,$07,$0F,$17,$27, $00,$00,$00,$01,$01,$07,$0F,$1F,
-
+.byt $00,$00,$03,$03,$07,$0F,$17,$27,$00,$00,$00,$01,$01,$07,$0F,$1F
+.byt $1F,$7F,$FF,$FF,$FF,$FF,$FF,$FF,$00,$1F,$7F,$FF,$FF,$FF,$FF,$FF
+.byt $F8,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$00,$F8,$FE,$FF,$FF,$FF,$FF,$FF
+.byt $00,$00,$C0,$C0,$E0,$F0,$E8,$E4,$00,$00,$00,$80,$80,$E0,$F0,$F8
 
 
 ; Unused tiles
@@ -320,6 +328,7 @@ _nmi_handler:
 .byt $C9,$93,$A5,$C9,$93,$A5,$C9,$93,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
 .byt $A5,$C9,$93,$A5,$C9,$93,$A5,$C9,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
 .byt $93,$A5,$C9,$93,$A5,$FF,$7E,$18,$FF,$FF,$FF,$FF,$FF,$81,$66,$18
+
 
 ; Unused tiles
 .dsb $1000-*, $00
