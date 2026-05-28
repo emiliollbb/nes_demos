@@ -192,18 +192,14 @@ _update:
   AND #BTN_UP
   BEQ next
   ; Update y coord
-  LDX $0200
-  DEX
-  STX $0200
+  DEC $0200
   next:
   
   LDA gamepad1
   AND #BTN_DOWN
   BEQ next2
   ; Update y coord
-  LDX $0200
-  INX
-  STX $0200
+  INC $0200
   next2:
   
   RTS
@@ -315,6 +311,8 @@ _nmi_handler:
 .byt $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,
 ; Tile 1
 .byt $18,$7E,$FF,$93,$A5,$C9,$93,$A5,$18,$66,$81,$FF,$FF,$FF,$FF,$FF
+.byt $C9,$93,$A5,$C9,$93,$A5,$C9,$93,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+.byt $A5,$C9,$93,$A5,$C9,$93,$A5,$C9,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
 
 ; Unused tiles
 .dsb $1000-*, $00
