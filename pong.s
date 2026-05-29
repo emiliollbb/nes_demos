@@ -309,11 +309,17 @@ _nmi_handler:
 ; Tile 0, all with color zero
 .byt $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
 ; Tile 1
-.byt $00,$00,$03,$03,$07,$0F,$17,$27,$00,$00,$00,$01,$01,$07,$0F,$1F
-.byt $1F,$7F,$FF,$FF,$FF,$FF,$FF,$FF,$00,$1F,$7F,$FF,$FF,$FF,$FF,$FF
-.byt $F8,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$00,$F8,$FE,$FF,$FF,$FF,$FF,$FF
-.byt $00,$00,$C0,$C0,$E0,$F0,$E8,$E4,$00,$00,$00,$80,$80,$E0,$F0,$F8
-
+.byt $00,$00,$03,$03,$07,$0F,$17,$27,$00,$00,$00,$01,$01,$07,$0F,$1F ; 1
+.byt $1F,$7F,$FF,$FF,$FF,$FF,$FF,$FF,$00,$1F,$7F,$FF,$FF,$FF,$FF,$FF ; 2
+.byt $F8,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$00,$F8,$FE,$FF,$FF,$FF,$FF,$FF ; 3
+.byt $00,$00,$C0,$C0,$E0,$F0,$E8,$E4,$00,$00,$00,$80,$80,$E0,$F0,$F8 ; 4
+.byt $73,$F3,$F3,$F3,$F9,$F9,$F9,$F9,$3F,$7F,$7F,$7F,$7F,$7F,$7F,$7F ; 5
+.byt $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF ; 6
+.byt $CE,$CF,$CF,$CF,$9F,$9F,$9F,$9F,$FC,$FE,$FE,$FE,$FE,$FE,$FE,$FE ; 7
+.byt $FC,$FC,$FC,$FC,$FE,$FE,$FE,$FE,$7F,$7F,$7F,$7F,$7F,$7F,$7F,$7F ; 8
+.byt $FF,$FF,$FF,$FF,$7F,$7F,$7F,$7F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF ; 9
+.byt $FF,$FF,$FF,$FF,$FE,$FE,$FE,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF ; 10
+.byt $3F,$3F,$3F,$3F,$7F,$7F,$7F,$7F,$FE,$FE,$FE,$FE,$FE,$FE,$FE,$FE ; 11
 
 ; Unused tiles
 .dsb $1000-*, $00
