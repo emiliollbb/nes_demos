@@ -68,6 +68,19 @@ _main:
   LDA #%00011110
   STA $2001
   
+  ; Enable square channel 1
+  LDA #%00000001
+  STA $4015
+  
+  LDA #%10111111 ; Duty 50% Volume F
+  STA $4000
+  
+  ; 0C9 do#
+  LDA #$C9
+  STA $4002
+  LDA #0
+  STA $4003
+  
 forever:
   JMP forever
 .)
