@@ -213,11 +213,16 @@ _update:
 .)
 
 sprites:
-;      y tile attr   x
-.byt 50,1,  $00,50
+; y tile attr x
+.byt 50,1,0,50
 .byt 58,2,0,50
 .byt 66,3,0,50
 .byt 74,4,0,50
+
+.byt 50,1,0,200
+.byt 58,2,0,200
+.byt 66,3,0,200
+.byt 74,4,0,200
 
 _reset_handler:
 .(
