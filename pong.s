@@ -189,25 +189,43 @@ forever:
 
 _update:
 .(
+  ; Player 1 up
   LDA gamepad1
   AND #BTN_UP
   BEQ next
-  ; Update y coord
   DEC $0200
   DEC $0204
   DEC $0208
   DEC $020C
   next:
-  
+  ; Player 1 down
   LDA gamepad1
   AND #BTN_DOWN
   BEQ next2
-  ; Update y coord
   INC $0200
   INC $0204
   INC $0208
   INC $020C
   next2:
+  
+  ; Player 2 up
+  LDA gamepad2
+  AND #BTN_UP
+  BEQ next3
+  DEC $0210
+  DEC $0214
+  DEC $0218
+  DEC $021C
+  next3:
+  ; Player 2 down
+  LDA gamepad2
+  AND #BTN_DOWN
+  BEQ next4
+  INC $0210
+  INC $0214
+  INC $0218
+  INC $021C
+  next4:
   
   RTS
 .)
