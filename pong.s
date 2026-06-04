@@ -126,6 +126,20 @@ _main:
   STA PPUDATA
   LDA #4
   STA PPUDATA
+  ; Second tile row at 
+  LDX PPUSTATUS
+  LDX #$20
+  STX PPUADDR
+  LDX #$20
+  STX PPUADDR
+  LDA #5
+  STA PPUDATA
+  LDA #6
+  STA PPUDATA
+  LDA #6
+  STA PPUDATA
+  LDA #7
+  STA PPUDATA
     
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
