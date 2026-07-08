@@ -117,30 +117,10 @@ _main:
   STX PPUADDR
   LDX #<PPU_SCREEN_1_MAP
   STX PPUADDR
-  ; Store first of 960 tiles
+  ; Send background tiles
   LDA #1
   STA PPUDATA
-  LDA #2
-  STA PPUDATA
-  LDA #3
-  STA PPUDATA
-  LDA #4
-  STA PPUDATA
-  ; Second tile row at 
-  LDX PPUSTATUS
-  LDX #$20
-  STX PPUADDR
-  LDX #$20
-  STX PPUADDR
-  LDA #5
-  STA PPUDATA
-  LDA #6
-  STA PPUDATA
-  LDA #6
-  STA PPUDATA
-  LDA #7
-  STA PPUDATA
-    
+      
   ; Set PPU address to attribute map 1
   LDX PPUSTATUS
   LDX #>PPU_SCREEN_1_ATTR
@@ -157,7 +137,7 @@ _main:
   LDA #248
   STA scrolly
   
-  ; write sprite data
+  ; Load sprites to ram cache
   LDX #0
   loop3:
   LDA sprites,X
@@ -357,6 +337,10 @@ _nmi_handler:
 .byt $FF,$FF,$FF,$FF,$7F,$7F,$7F,$7F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF ; 9
 .byt $FF,$FF,$FF,$FF,$FE,$FE,$FE,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF ; 10
 .byt $3F,$3F,$3F,$3F,$7F,$7F,$7F,$7F,$FE,$FE,$FE,$FE,$FE,$FE,$FE,$FE ; 11
+.byt $FE,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$7F,$7F,$7F,$7F,$7F,$7F,$7F,$7F ; 12
+.byt $7F,$7F,$3F,$3F,$3F,$3F,$3F,$3F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF ; 13
+.byt $FE,$FE,$FC,$FC,$FC,$FC,$FC,$FC,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF ; 14
+.byt $7F,$7F,$FF,$FF,$FF,$FF,$FF,$FF,$FE,$FE,$FE,$FE,$FE,$FE,$FE,$FE ; 15
 
 ; Unused tiles
 .dsb $1000-*, $00
